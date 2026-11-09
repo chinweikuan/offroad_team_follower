@@ -1,0 +1,18 @@
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: offroad_team_follower:dev
+    container_name: offroad_team_follower_dev
+    stdin_open: true
+    tty: true
+    # Gazebo and ROS 2 DDS use shared memory; Docker's 64 MB default is too small.
+    shm_size: 1gb
+    environment:
+      # No GPU passthrough on macOS: Mesa renders on the CPU (llvmpipe).
+      - LIBGL_ALWAYS_SOFTWARE=1
+    volumes:
+      # Edit on the host, build inside the container. build/, install/ and log/ stay
+      # in the container under /root/ws.
+      - ../:/root/ws/src/offroad_team_follower:rw
